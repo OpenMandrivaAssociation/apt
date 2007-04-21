@@ -1,6 +1,6 @@
 %define	name		apt
-%define version 0.5.15cnc6
-%define release %mkrel 15
+%define version 0.5.15lorg3.2
+%define release %mkrel	1
 %define _lib_name	%{name}-pkg
 %define lib_name_orig	lib%{_lib_name}
 %define major		0
@@ -17,12 +17,9 @@ Version:	%{version}
 Release:	%{release}
 Summary:	Debian's Advanced Packaging Tool with RPM support 
 Group:		System/Configuration/Packaging
-Url:		https://moin.conectiva.com.br/AptRpm
+Url:		http://www.apt-rpm.org/
 License:	GPL
-# downloaded on https://moin.conectiva.com.br/AptRpm?action=AttachFile&do=get&target=%{name}-%{version}.tar.bz2
-# use wget -U some_user_agent, it prevent wget downloading
-# wget -U plop "https://moin.conectiva.com.br/AptRpm?action=AttachFile&do=get&target=%{name}-%{version}.tar.bz2"
-Source0:	https://moin.conectiva.com.br/files/AptRpm/attachments/%{name}-%{version}.tar.bz2
+Source0:	http://apt-rpm.org/releases/%{name}-%{version}.tar.bz2
 Source1:	%{name}-apt.conf.bz2
 Source2:	%{name}-sources.list.bz2
 Source3:	%{name}-vendors.list.bz2
@@ -34,11 +31,6 @@ Patch2:		%{name}-mandrake-everywhere.patch.bz2
 
 # enhance the sorting by taking Obsoletes into account
 Patch3:		%{name}-0.3.19cnc53-stelian-apt-pkg-algorithms-scores.patch.bz2
-# mark some mdk package as essential
-Patch4:		%{name}-0.5.4cnc7-rpmpriorities.patch.bz2
-# add a configuration option ( APT::Install::Virtual )
-Patch6:		%{name}-0.5.4cnc9-alt-install_virtual.patch.bz2
-#Patch7:		%{name}-0.5.4cnc9-alt-install_virtual_version.patch.bz2
 
 # TODO document this patch
 Patch8:		%{name}-0.5.4cnc9-alt-packagemanager-CheckRConflicts.patch.bz2
@@ -52,12 +44,8 @@ Patch11:	%{name}-0.5.4cnc9-alt-specialchars.patch.bz2
 # add a missing ifdef
 Patch12:	%{name}-0.5.5cnc1-alt-APT_DOMAIN.patch.bz2
 
-# add APT::Ignore-dpkg option, to not take dpkg in account
-# for score calculation
-Patch13:	%{name}-0.5.5cnc1-alt-debsystem.patch.bz2
-
 # s/de_DE/de/ and  /it_IT/it/ in po files
-Patch14:	%{name}-invalid-lc-messages-dir.patch.bz2
+Patch14:	%{name}-invalid-lc-messages-dir.patch
 
 # use the moo
 Patch15:    %{name}-moo.patch.bz2
@@ -74,24 +62,17 @@ Patch18:    %{name}-build-dep.patch.bz2
 # x86-64 and other build fixes for python
 Patch19:        apt-0.5.15cnc6-python-build-fixes.patch.bz2
 
-# rpm 4.4.4 fix
+# fix for Jeff Johnson's forked rpm 4.4.4
 Patch20:	apt-0.5.15cnc6-rpm-4.4.4.patch.bz2
 
-# (cjw) add support for rpm 4.4.x Suggests: tag
-Patch21:	apt-0.5.15cnc6-rpm-suggests.patch.bz2
-
-# rpm 4.4.6 fixes
-Patch22:	apt-0.5.15cnc6-rpm-4.4.6.patch.bz2
-
-# fix rpmlib(...) check for case when 1st internal dep matches
-# from 0.5.15lorg3.2
-Patch23:	apt-0.5.15cnc6-fix-rpm-internal-dep-check.patch.bz2
+# build fixes for Jeff Johnson's forked rpm 4.4.6
+Patch22:	apt-0.5.15cnc6-rpm-4.4.6.patch
 
 # use hdlist ( in gz ) instead of apt index ( in bz2 )
 # it replace bz2 compression by gz, 
 # it remove some check in acquire-item.cc
 # it add default 0: Epoch to all package
-Patch300:	%{name}-0.5.5cnc6-mdk.patch.bz2
+Patch300:	%{name}-0.5.5cnc6-mdk.patch
 
 Requires:	gnupg
 BuildRequires:	autoconf2.5
@@ -163,25 +144,17 @@ such as synaptic, aptitude.
 # mdk everywhere patch
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch6 -p1
-#%patch7 -p1
 %patch8 -p1
 %patch9 -p1
 #%patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p1
 %patch14 -p1
 %patch15 -p1
 #%patch16 -p1
 %patch17 -p1
 %patch18 -p1 -b .build-dep-fix
-%patch19 -p1 -b .fixes
-%patch20 -p1 -b .rpm444
-%patch21 -p1 -b .suggests
 %patch22 -p1 -b .rpm446
-%patch23 -p1 -b .internal-rpm-deps
 
 %patch300 -p1 
 #%patch301 -p1
@@ -194,11 +167,10 @@ bzcat %{SOURCE4} > rpmpriorities
 bzcat %{SOURCE5} > mandriva.conf
 
 %build
-# (misc) doesn't work without this on 24/12/2003, i do not have time to look further
-cp -f /usr/share/gettext/po/Makefile.in.in po
-export WANT_AUTOCONF_2_5=1
-aclocal-1.7 -I buildlib
-autoconf-2.5x
+rm -f configure
+aclocal -I buildlib -I m4
+automake -a -c
+autoconf
 %configure2_5x --with-hashmap
 
 # This next line is necessary because of the invalid-lc-messages-dir patch
