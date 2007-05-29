@@ -1,6 +1,6 @@
 %define	name		apt
 %define version 0.5.15lorg3.2
-%define release %mkrel	2
+%define release %mkrel	3
 %define _lib_name	%{name}-pkg
 %define lib_name_orig	lib%{_lib_name}
 %define major		0
@@ -57,7 +57,7 @@ Patch15:    %{name}-moo.patch.bz2
 Patch17:    %{name}-0.5.15cnc4-whatprovides.patch.bz2
 
 # a quick bugfixe to make build-dep work
-Patch18:    %{name}-build-dep.patch.bz2
+Patch18:    %{name}-build-dep.patch
 
 # x86-64 and other build fixes for python
 Patch19:        apt-0.5.15cnc6-python-build-fixes.patch.bz2
