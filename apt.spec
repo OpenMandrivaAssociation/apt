@@ -1,6 +1,6 @@
 %define	name		apt
 %define version 0.5.15lorg3.2
-%define release %mkrel	3
+%define release %mkrel	4
 %define _lib_name	%{name}-pkg
 %define lib_name_orig	lib%{_lib_name}
 %define major		0
@@ -75,8 +75,6 @@ Patch22:	apt-0.5.15cnc6-rpm-4.4.6.patch
 Patch300:	%{name}-0.5.5cnc6-mdk.patch
 
 Requires:	gnupg
-BuildRequires:	autoconf2.5
-BuildRequires:	automake1.7
 BuildRequires:	docbook-dtd31-sgml
 BuildRequires:	docbook-utils
 BuildRequires:	gettext-devel
