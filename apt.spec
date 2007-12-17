@@ -85,7 +85,6 @@ BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	rpm-devel >= 4.2
 BuildRequires:  python-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 Epoch: 1
 
 %description
