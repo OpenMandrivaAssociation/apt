@@ -1,6 +1,6 @@
 %define	name		apt
 %define version 0.5.15lorg3.2
-%define release %mkrel	5
+%define release %mkrel	6
 %define _lib_name	%{name}-pkg
 %define lib_name_orig	lib%{_lib_name}
 %define major		0
@@ -61,15 +61,6 @@ Patch18:    %{name}-build-dep.patch
 
 # x86-64 and other build fixes for python
 Patch19:        apt-0.5.15cnc6-python-build-fixes.patch.bz2
-
-# fix for Jeff Johnson's forked rpm 4.4.4
-Patch20:	apt-0.5.15cnc6-rpm-4.4.4.patch.bz2
-
-# build fixes for Jeff Johnson's forked rpm 4.4.6
-Patch22:	apt-0.5.15cnc6-rpm-4.4.6.patch
-
-# build fixes for Jeff Johnson's forked rpm 4.4.8 + fix architecture (platform) matching
-Patch23:	apt-0.5.15lorg3.2-jbjpm448.patch
 
 # use hdlist ( in gz ) instead of apt index ( in bz2 )
 # it replace bz2 compression by gz, 
@@ -155,8 +146,6 @@ such as synaptic, aptitude.
 #%patch16 -p1
 %patch17 -p1
 %patch18 -p1 -b .build-dep-fix
-%patch22 -p1 -b .rpm446
-%patch23 -p1 -b .rpm448
 
 %patch300 -p1 
 #%patch301 -p1
