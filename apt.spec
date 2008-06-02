@@ -199,7 +199,7 @@ rm -rf $RPM_BUILD_ROOT
 %makeinstall
 
 install -d -m 755 $RPM_BUILD_ROOT/var/cache/%{name}/archives/partial
-install -d -m 755 $RPM_BUILD_ROOT%{_localstatedir}/%{name}/lists/partial
+install -d -m 755 $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/lists/partial
 
 install -d -m 755 $RPM_BUILD_ROOT%{_includedir}/apt-pkg
 mv $RPM_BUILD_ROOT%{_includedir}/*.h $RPM_BUILD_ROOT%{_includedir}/apt-pkg
@@ -278,7 +278,7 @@ rm -rf %{buildroot}
 %files common
 %{_libdir}/%{name}
 /var/cache/%{name}
-%{_localstatedir}/%{name}
+%{_localstatedir}/lib/%{name}
 %dir %{_sysconfdir}/apt
 %config(noreplace) %{_sysconfdir}/apt/apt.conf 
 %config(noreplace) %{_sysconfdir}/apt/sources.list
