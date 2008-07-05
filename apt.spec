@@ -36,7 +36,6 @@ Patch3:		%{name}-0.3.19cnc53-stelian-apt-pkg-algorithms-scores.patch.bz2
 Patch8:		%{name}-0.5.4cnc9-alt-packagemanager-CheckRConflicts.patch.bz2
 # alternative scoring method ( PreDepends implies -1 instead of +50 )
 Patch9:		%{name}-0.5.4cnc9-alt-pkgorderlist_score.patch.bz2
-#Patch10:	%{name}-0.5.4cnc9-alt-rsync.patch.bz2
 
 # add # to the list of the forbidden char in the name of cdrom
 Patch11:	%{name}-0.5.4cnc9-alt-specialchars.patch.bz2
@@ -50,9 +49,6 @@ Patch14:	%{name}-invalid-lc-messages-dir.patch
 # use the moo
 Patch15:    %{name}-moo.patch.bz2
 
-# enforce Epoch promotion
-#Patch16:    %{name}.0.5.15cnc4-epoch.patch.bz2
-
 # add WhatProvides command
 Patch17:    %{name}-0.5.15cnc4-whatprovides.patch.bz2
 
@@ -61,6 +57,12 @@ Patch18:    %{name}-build-dep.patch
 
 # x86-64 and other build fixes for python
 Patch19:        apt-0.5.15cnc6-python-build-fixes.patch.bz2
+
+# (cjw) fix "number of package names exceeded" error
+Patch20:	apt-0.5.15lorg3.94a-lots-of-packages.patch
+
+# (cjw) fix build problems with gcc 4.3
+Patch21:	apt-0.5.15lorg3.2-gcc43.patch
 
 # use hdlist ( in gz ) instead of apt index ( in bz2 )
 # it replace bz2 compression by gz, 
@@ -138,17 +140,16 @@ such as synaptic, aptitude.
 %patch3 -p1
 %patch8 -p1
 %patch9 -p1
-#%patch10 -p1
 %patch11 -p1
 %patch12 -p1
 %patch14 -p1
 %patch15 -p1
-#%patch16 -p1
 %patch17 -p1
 %patch18 -p1 -b .build-dep-fix
+%patch20 -p1 -b .many-packages
+%patch21 -p1 -b .gcc43
 
-%patch300 -p1 
-#%patch301 -p1
+%patch300 -p1 -b .hdlist
 
 
 bzcat %{SOURCE1} > apt.conf
