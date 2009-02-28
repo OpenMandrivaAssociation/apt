@@ -27,21 +27,17 @@ Source4:	%{name}-rpmpriorities.bz2
 Source5:	%{name}-mandriva.conf.bz2
 
 # (misc) replace all mentions of Debian and Conectiva with Mandriva
-Patch2:		%{name}-mandrake-everywhere.patch.bz2
-
+Patch2:		apt-0.5.15lorg3.2-mandriva-everywhere.patch
 # enhance the sorting by taking Obsoletes into account
-Patch3:		%{name}-0.3.19cnc53-stelian-apt-pkg-algorithms-scores.patch.bz2
-
+Patch3:		apt-0.3.19cnc53-stelian-apt-pkg-algorithms-scores.patch
 # TODO document this patch
 Patch8:		%{name}-0.5.4cnc9-alt-packagemanager-CheckRConflicts.patch.bz2
 # alternative scoring method ( PreDepends implies -1 instead of +50 )
 Patch9:		%{name}-0.5.4cnc9-alt-pkgorderlist_score.patch.bz2
-
 # add # to the list of the forbidden char in the name of cdrom
-Patch11:	%{name}-0.5.4cnc9-alt-specialchars.patch.bz2
-
+Patch11:	apt-0.5.15lorg3.2-alt-specialchars.patch
 # add a missing ifdef
-Patch12:	%{name}-0.5.5cnc1-alt-APT_DOMAIN.patch.bz2
+Patch12:	apt-0.5.15lorg3.2-alt-APT_DOMAIN.patch
 
 # s/de_DE/de/ and  /it_IT/it/ in po files
 Patch14:	%{name}-invalid-lc-messages-dir.patch
@@ -50,7 +46,7 @@ Patch14:	%{name}-invalid-lc-messages-dir.patch
 Patch15:    %{name}-moo.patch.bz2
 
 # add WhatProvides command
-Patch17:    %{name}-0.5.15cnc4-whatprovides.patch.bz2
+Patch17:    apt-0.5.15lorg3.2-whatprovides.patch
 
 # a quick bugfixe to make build-dep work
 Patch18:    %{name}-build-dep.patch
@@ -59,7 +55,7 @@ Patch18:    %{name}-build-dep.patch
 Patch19:        apt-0.5.15cnc6-python-build-fixes.patch.bz2
 
 # (cjw) fix "number of package names exceeded" error
-Patch20:	apt-0.5.15lorg3.94a-lots-of-packages.patch
+Patch20:	apt-0.5.15lorg3.2-lots-of-packages.patch
 
 # (cjw) fix build problems with gcc 4.3
 Patch21:	apt-0.5.15lorg3.2-gcc43.patch
@@ -68,7 +64,7 @@ Patch21:	apt-0.5.15lorg3.2-gcc43.patch
 # it replace bz2 compression by gz, 
 # it remove some check in acquire-item.cc
 # it add default 0: Epoch to all package
-Patch300:	%{name}-0.5.5cnc6-mdk.patch
+Patch300:	apt-0.5.15lorg3.2-mdv.patch
 
 Requires:	gnupg
 BuildRequires:	docbook-dtd31-sgml
@@ -160,6 +156,7 @@ bzcat %{SOURCE5} > mandriva.conf
 
 %build
 rm -f configure
+libtoolize --force
 aclocal -I buildlib -I m4
 automake -a -c
 autoconf
