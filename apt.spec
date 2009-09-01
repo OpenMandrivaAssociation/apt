@@ -1,6 +1,6 @@
 %define	name		apt
 %define version 0.5.15lorg3.2
-%define release %mkrel	7
+%define release %mkrel	8
 %define _lib_name	%{name}-pkg
 %define lib_name_orig	lib%{_lib_name}
 %define major		0
