@@ -73,6 +73,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	rpm-devel >= 4.2
+BuildRequires:	libxml2-devel >= 2.6
 BuildRequires:  python-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 Epoch: 1
