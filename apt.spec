@@ -23,10 +23,10 @@ Url:		http://www.apt-rpm.org/
 License:	GPLv2+
 # created from http://gitorious.org/rpm5distro/apt-rpm/
 Source0:	http://apt-rpm.org/releases/%{name}-%{version}.tar.xz
-Source1:	%{name}-apt.conf.bz2
+Source1:	%{name}-apt.conf
 Source2:	%{name}-sources.list
 Source3:	%{name}-vendors.list
-Source4:	%{name}-rpmpriorities.bz2
+Source4:	%{name}-rpmpriorities
 Source5:	%{name}-mandriva.conf
 # not used
 Source8:	apt-pbo
@@ -35,7 +35,7 @@ Source8:	apt-pbo
 # it replace bz2 compression by gz, 
 # it remove some check in acquire-item.cc
 # it add default 0: Epoch to all package
-Patch300:	apt-0.5.15lorg3.2-mdv.patch
+#Patch300:	apt-0.5.15lorg3.2-mdv.patch
 
 Requires:	gnupg
 Requires: 	gzip
@@ -122,7 +122,9 @@ such as synaptic, aptitude.
 # Parallel make is taken account in the configure script
 %make NOISY=1
 
+%if 0
 (cd python; %make)
+%endif
 
 %install
 cat <<EOF >README.Mandriva
@@ -142,15 +144,13 @@ install -d -m 755 $RPM_BUILD_ROOT/var/lib/%{name}/lists/partial
 install -d -m 755 $RPM_BUILD_ROOT%{_includedir}/apt-pkg
 mv $RPM_BUILD_ROOT%{_includedir}/*.h $RPM_BUILD_ROOT%{_includedir}/apt-pkg
 
-install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/apt
+install -m644 %{SOURCE1} -D $RPM_BUILD_ROOT%{_sysconfdir}/apt/apt.conf
 echo "APT::Install-Suggests \"true\";" > $RPM_BUILD_ROOT%{_sysconfdir}/apt/apt.conf.d/01-suggests.conf
-install -m 644 apt.conf $RPM_BUILD_ROOT%{_sysconfdir}/apt
-install -m 644 sources.list $RPM_BUILD_ROOT%{_sysconfdir}/apt
-install -m 644 vendors.list $RPM_BUILD_ROOT%{_sysconfdir}/apt
-install -m 644 rpmpriorities $RPM_BUILD_ROOT%{_sysconfdir}/apt
+install -m644 %{SOURCE2} -D $RPM_BUILD_ROOT%{_sysconfdir}/apt/sources.list
+install -m644 %{SOURCE3} -D $RPM_BUILD_ROOT%{_sysconfdir}/apt/vendors.list
+install -m644 %{SOURCE4} -D $RPM_BUILD_ROOT%{_sysconfdir}/apt/rpmpriorities
 
-install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/apt/apt.conf.d
-install -m 644 mandriva.conf $RPM_BUILD_ROOT%{_sysconfdir}/apt/apt.conf.d
+install -m644 %{SOURCE5} -D $RPM_BUILD_ROOT%{_sysconfdir}/apt/apt.conf.d/mandriva.conf
 
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/apt/translate.list.d
 
