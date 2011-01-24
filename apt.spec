@@ -5,14 +5,13 @@
 %define _requires_exceptions devel(libjsoncpp
 
 %define	name		apt
-%define version		0.5.15lorg3.94
-%define versionadd	pt
+%define version 0.5.15lorg3.95
 %define release %mkrel	1
 %define _lib_name	%{name}-pkg
 %define lib_name_orig	lib%{_lib_name}
 %define major		4
 %define libname		%mklibname %_lib_name %major
-%define libnamedevel	%mklibname %_lib_name %major -d
+%define libnamedevel	%mklibname %_lib_name -d
 
 
 Name:		%{name}
@@ -22,7 +21,8 @@ Summary:	Debian's Advanced Packaging Tool with RPM support
 Group:		System/Configuration/Packaging
 Url:		http://www.apt-rpm.org/
 License:	GPLv2+
-Source0: 	%{name}-%{version}%{versionadd}.tar.bz2	
+# created from http://gitorious.org/rpm5distro/apt-rpm/
+Source0:	http://apt-rpm.org/releases/%{name}-%{version}.tar.xz
 Source1:	%{name}-apt.conf.bz2
 Source2:	%{name}-sources.list
 Source3:	%{name}-vendors.list
@@ -31,30 +31,11 @@ Source5:	%{name}-mandriva.conf
 # not used
 Source8:	apt-pbo
 
-## from Caixa Magica's apt:
-# URPM Lists support 
-# DUDF MANCOOSI project support
-# Rollback, URPM, DUDF and pbo features 
-Patch1:		%{name}-git-cm15-05.patch.bz2
-
-# enhance the sorting by taking Obsoletes into account
-Patch3:		apt-0.3.19cnc53-stelian-apt-pkg-algorithms-scores.patch
-# TODO document this patch
-Patch8:		%{name}-0.5.4cnc9-alt-packagemanager-CheckRConflicts.patch
-# alternative scoring method ( PreDepends implies -1 instead of +50 )
-Patch9:		%{name}-0.5.4cnc9-alt-pkgorderlist_score.patch
-# add # to the list of the forbidden char in the name of cdrom
-Patch11:	apt-0.5.15lorg3.2-alt-specialchars.patch
-
-# s/de_DE/de/ and  /it_IT/it/ in po files
-Patch14:	%{name}-invalid-lc-messages-dir.patch
-
-# use the moo
-Patch15:	apt-moo.patch
-
-# a quick bugfixe to make build-dep work
-Patch18:	%{name}-build-dep.patch
-
+# use hdlist ( in gz ) instead of apt index ( in bz2 )
+# it replace bz2 compression by gz, 
+# it remove some check in acquire-item.cc
+# it add default 0: Epoch to all package
+Patch300:	apt-0.5.15lorg3.2-mdv.patch
 
 Requires:	gnupg
 Requires: 	gzip
@@ -131,38 +112,17 @@ This package contains the needed files for various apt-frontend,
 such as synaptic, aptitude.
 
 %prep
-%setup -q -n %{name}-%{version}%{versionadd}
-%patch1 -p1
-%patch3 -p1 -b .scores
-%patch8 -p1 -b .checkrconflicts
-%patch9 -p1 -b .predepends-scores
-%patch11 -p1 -b .specialchars
-%patch14 -p1
-%patch15 -p1 -b .moo
-%patch18 -p1 -b .build-dep-fix
-
-bzcat %{SOURCE1} > apt.conf
-sed 's/%%ARCH%%/%{_target_cpu}/' %{SOURCE2} > sources.list
-cat %{SOURCE3} > vendors.list
-bzcat %{SOURCE4} > rpmpriorities
-cat %{SOURCE5} > mandriva.conf
+%setup -q
+# TODO: make customizable
+#%%patch300 -p1 -b .hdlist
 
 %build
-rm -f configure
-libtoolize --copy --force --install
-aclocal -I m4
-automake -a -c
-autoconf
 %configure2_5x 
-
-# This next line is necessary because of the invalid-lc-messages-dir patch
-(cd po; cp -f de_DE.po de.po; cp -f it_IT.po it.po)
-
 
 # Parallel make is taken account in the configure script
 %make NOISY=1
 
-#( cd python; %make )
+(cd python; %make)
 
 %install
 cat <<EOF >README.Mandriva
@@ -173,7 +133,7 @@ cannot be used anymore.
 EOF
 
 rm -rf $RPM_BUILD_ROOT
-%makeinstall
+%makeinstall -k
 rm -rf $RPM_BUILD_ROOT%{_bindir}/apt-pbo
 
 install -d -m 755 $RPM_BUILD_ROOT/var/cache/%{name}/archives/partial
@@ -185,7 +145,8 @@ mv $RPM_BUILD_ROOT%{_includedir}/*.h $RPM_BUILD_ROOT%{_includedir}/apt-pkg
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/apt
 echo "APT::Install-Suggests \"true\";" > $RPM_BUILD_ROOT%{_sysconfdir}/apt/apt.conf.d/01-suggests.conf
 install -m 644 apt.conf $RPM_BUILD_ROOT%{_sysconfdir}/apt
-install -m 644 *.list $RPM_BUILD_ROOT%{_sysconfdir}/apt
+install -m 644 sources.list $RPM_BUILD_ROOT%{_sysconfdir}/apt
+install -m 644 vendors.list $RPM_BUILD_ROOT%{_sysconfdir}/apt
 install -m 644 rpmpriorities $RPM_BUILD_ROOT%{_sysconfdir}/apt
 
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/apt/apt.conf.d
@@ -207,6 +168,12 @@ install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/apt/scripts
 cat %{lib_name_orig}-pkg3.3.lang >> %{name}.lang
 rm -f %{lib_name_orig}-pkg3.3.lang
 
+# Python
+%if 0
+install -d -m 755 $RPM_BUILD_ROOT/%py_sitedir/
+install -m 644 python/_apt.so  $RPM_BUILD_ROOT/%py_sitedir/
+install -m 644 python/apt.py $RPM_BUILD_ROOT/%py_sitedir/
+%endif
 
 %triggerun -- apt < 0.5.4
 # Convert options from 0.3.X to 0.5.X
@@ -240,13 +207,6 @@ if [ -f $CONF ]; then
       rm -f $CONF.rpmtmp.$$
    fi
 fi
-
-
-%post -n %{libname} -p /sbin/ldconfig
-
-%post -n %{name}-common
-
-%postun -n %{libname} -p /sbin/ldconfig
 
 %clean
 rm -rf %{buildroot}
@@ -287,5 +247,10 @@ rm -rf %{buildroot}
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/*.la
-%{_libdir}/pkgconfig/*.pc
+%{_libdir}/pkgconfig/libapt-pkg.pc
 
+%if 0
+%files -n python-%{name}
+%defattr(-,root,root)
+%py_sitedir/*
+%endif
