@@ -1,0 +1,8 @@
+sources:
+  "apt-0.5.15lorg3.95.tar.xz:"	a0b541235de2da9b78dff716131f65bb68e68708
+  "apt-apt.conf:"	62c5732f4b3ca34f6e03b0b4bae345c1e375439f
+  "apt-mandriva.conf:"	32359589f045d8ceaa3547f0c3ebffec2a82e467
+  "apt-pbo:"	d4faad473a7ae81fadf3a7c491cb586999f1dbbe
+  "apt-rpmpriorities:"	141222d5e8d110a8a05ae35d8bd289f9b510c4c0
+  "apt-sources.list:"	caab60bb3b3ccc1dd133269a6e89afde526507d2
+  "apt-vendors.list:"	1ed47cfc5138dce71beafcadbf69771c276a6064
