@@ -19,7 +19,7 @@ Version:	%{version}
 Release:	%{release}
 Summary:	Debian's Advanced Packaging Tool with RPM support 
 Group:		System/Configuration/Packaging
-Url:		http://www.apt-rpm.org/
+Url:		https://www.apt-rpm.org/
 License:	GPLv2+
 # created from http://gitorious.org/rpm5distro/apt-rpm/
 Source0:	http://apt-rpm.org/releases/%{name}-%{version}.tar.xz
