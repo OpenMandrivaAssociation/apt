@@ -40,6 +40,8 @@ Source8:	apt-pbo
 Requires:	gnupg
 Requires: 	gzip
 Requires:	%{name}-common
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	gettext-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
