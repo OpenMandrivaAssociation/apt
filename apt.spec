@@ -6,7 +6,7 @@
 
 %define	name		apt
 %define version 0.5.15lorg3.95
-%define release %mkrel	1
+%define release 2
 %define _lib_name	%{name}-pkg
 %define lib_name_orig	lib%{_lib_name}
 %define major		4
